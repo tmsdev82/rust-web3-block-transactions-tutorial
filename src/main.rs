@@ -103,6 +103,9 @@ async fn main() {
         };
 
         let input_str: String = w3h::to_string(&tx.input);
+        if input_str.len() < 12 {
+            continue;
+        }
         let func_code = input_str[3..11].to_string();
         let func_signature: String = match code_sig_lookup.get(&func_code) {
             Some(func_sig) => format!("{:?}", func_sig),
@@ -117,7 +120,7 @@ async fn main() {
 
         let eth_value = wei_to_eth(tx.value);
         println!(
-            "[{}] ({}) -> {} from {}, to {}, value {}, gas {}, gas price {}",
+            "[{}] ({} -> {}) from {}, to {}, value {}, gas {}, gas price {}",
             tx.transaction_index.unwrap_or(U64::from(0)),
             &token_name,
             &func_signature,
